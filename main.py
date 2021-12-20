@@ -10,12 +10,12 @@ from fuzzywuzzy import fuzz
 import hashlib
 translator = Translator(raise_exception=True)
 clear = lambda: os.system('cls')
-languages = ["af", "sq", "am", "en", "ar", "hy", "az", "my", "eu", "be", "bn", "bs", "bg", "ceb", "cs", "ny", "zh-CN",
-             "da", "eo", "et", "tl", "fi", "fr", "fy", "gl", "ka", "gu", "ht", "ha", "haw", "iw", "hi", "hmn", "nl",
-             "hr", "ig", "id", "ga", "is", "it", "ja", "jw", "yi", "yo", "kn", "ca", "kk", "km", "ko", "co", "ku", "ky",
-             "lo", "la", "lt", "lv", "lb", "hu", "mk", "ml", "ms", "mg", "mt", "mi", "mr", "mn", "de", "ne", "no", "pa",
-             "ps", "mn", "pl", "pt", "ro", "ru", "el", "sm", "st", "sd", "si", "gd", "sk", "sl", "so", "sr", "su", "sw",
-             "sn", "es", "sv", "tg", "ta", "te", "th", "tr", "ug", "uk", "ur", "or", "uz", "cy", "vi", "xh", "zu"]
+languages = ["af", "sq", "am", "en", "ar", "hy", "az", "my", "eu", "be", "bn", "bs", "bg", "ceb", "cs", "ny", "zh-cn",
+             "zh-tw", "da", "eo", "et", "tl", "fi", "fr", "fy", "gl", "ka", "gu", "ht", "ha", "haw", "iw", "hi", "hmn",
+             "nl", "hr", "ig", "id", "ga", "is", "it", "ja", "jw", "yi", "yo", "kn", "ca", "kk", "km", "ko", "co", "ku",
+             "ky", "lo", "la", "lt", "lv", "lb", "hu", "mk", "ml", "ms", "mg", "mt", "mi", "mr", "mn", "de", "ne", "no",
+             "pa", "ps", "mn", "pl", "pt", "ro", "ru", "el", "sm", "st", "sd", "si", "gd", "sk", "sl", "so", "sr", "su",
+             "sw", "sn", "es", "sv", "tg", "ta", "te", "th", "tr", "ug", "uk", "ur", "or", "uz", "cy", "vi", "xh", "zu"]
 
 
 def getsimilarity():
@@ -95,7 +95,7 @@ def translatefromfile():
     laststring = ""
     startword = word
     for i in range(num):
-        languageindex = random.randrange(0, 104)
+        languageindex = random.randrange(0, 105)
         language = languages[languageindex]
         langs += [language]
         try:
@@ -116,7 +116,7 @@ def translatefromfile():
     print(f"\n\n\n\n\n{startlang} -> {laststring}{getlangword()}")
     pyperclip.copy(finalword.text)
     if getsimilarity():
-        input(f"Original: {startword}\nTranslated: {finalword.text}\nSimilarity: {fuzz.ratio(startword, finalword.text)}%\n")
+        input(f"Original: {startword}\n\n\nTranslated: {finalword.text}\n\n\nSimilarity: {fuzz.ratio(startword, finalword.text)}%\n")
     else:
         input(f"{finalword.text}\n")
     choose()
@@ -140,7 +140,7 @@ def translate():
     startword = word
     laststring = ""
     for i in range(num):
-        languageindex = random.randrange(0, 104)
+        languageindex = random.randrange(0, 105)
         language = languages[languageindex]
         langs += [language]
         try:
