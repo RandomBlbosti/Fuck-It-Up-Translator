@@ -47,6 +47,12 @@ def getdelay():
     return data['delay']
 
 
+def getseedinput():
+    with open('settings.json') as f:
+        data = json.load(f)
+    return data['seedinput']
+
+
 def choose():
     if getlangs() > 50:
         with open('settings.json') as f:
@@ -74,6 +80,9 @@ def translatefromfile():
     ctypes.windll.kernel32.SetConsoleTitleW('Fuck-It-Up Translator | File Translate')
     langs = []
     clear()
+    if getseedinput():
+        seed = int(input("Seed (digits only): "))
+        random.seed(seed)
     num = getlangs()
     word = open("text.txt", "r").read()
     if word == "":
@@ -82,9 +91,9 @@ def translatefromfile():
     laststring = ""
     startword = word
     for i in range(num):
-        language = random.choice(languages)
+        languageindex = random.randrange(0, 104)
+        language = languages[languageindex]
         langs += [language]
-        print(language)
         try:
             word2 = translator.translate(word, dest=language)
         except:
@@ -110,29 +119,28 @@ def translatefromfile():
 
 
 def translate():
-    possiblyratelimited = False
     ctypes.windll.kernel32.SetConsoleTitleW('Fuck-It-Up Translator | Phrase Translate')
     langs = []
     clear()
     num = getlangs()
-    word = input("phrase: ")
+    if getseedinput():
+        seed = int(input("Seed (digits only): "))
+        random.seed(seed)
+    word = input("Phrase: ")
     if word == "":
         choose()
     startlang = LANGUAGES[translator.detect(word).lang].title()
     startword = word
     laststring = ""
     for i in range(num):
-        language = random.choice(languages)
+        languageindex = random.randrange(0, 104)
+        language = languages[languageindex]
         langs += [language]
         try:
             word2 = translator.translate(word, dest=language)
         except:
             input("You are ratelimited! Wait a while or use a VPN/proxy.")
             choose()
-        if word2.text == word:
-            possiblyratelimited = True
-        else:
-            possiblyratelimited = False
         print(f"{LANGUAGES[language].title()}: {word2.text}")
         word = word2.text
         sleep(getdelay())
@@ -145,8 +153,6 @@ def translate():
         laststring += LANGUAGES[i].title() + " -> "
     print(f"\n\n\n\n\n{startlang} -> {laststring}{getlangword()}")
     pyperclip.copy(finalword.text)
-    if possiblyratelimited:
-        print("You might be ratelimited! If you are, try waiting a while or using a VPN/proxy.")
     if getsimilarity():
         input(f"Original: {startword}\nTranslated: {finalword.text}\nSimilarity: {fuzz.ratio(startword, finalword.text)}%\n")
     else:
@@ -157,7 +163,7 @@ def translate():
 def settings():
     ctypes.windll.kernel32.SetConsoleTitleW('Fuck-It-Up Translator | Settings')
     clear()
-    type2 = input("(1) Change language\n(2) Set delay between translations\n(3) Set language amount\n(4) Show similarity\n(5) View settings\n(6) Help\n(7) Exit\n")
+    type2 = input("(1) Change language\n(2) Set delay between translations\n(3) Set language amount\n(4) Allow seed input\n(5) Show similarity\n(6) View settings\n(7) Help\n(8) Exit\n")
     if type2 == "1":
         clear()
         ctypes.windll.kernel32.SetConsoleTitleW('Fuck-It-Up Translator | Change Language')
@@ -165,34 +171,27 @@ def settings():
             "(1) English\n(2) Czech\n(3) Slovak\n(4) German\n(5) French\n(6) Russian\n(7) Croatian\n(8) Polish\n(9) Exit\n")
         with open('settings.json') as f:
             data = json.load(f)
-        lang = data['language']
+        langu = data['language']
         if language == "1":
             prefix = "en"
-            lang = "English"
         elif language == "2":
             prefix = "cs"
-            lang = "Czech"
         elif language == "3":
             prefix = "sk"
-            lang = "Slovak"
         elif language == "4":
             prefix = "de"
-            lang = "German"
         elif language == "5":
             prefix = "fr"
-            lang = "French"
         elif language == "6":
             prefix = "ru"
-            lang = "Russian"
         elif language == "7":
             prefix = "hr"
-            lang = "Croatian"
         elif language == "8":
             prefix = "pl"
-            lang = "Polish"
         elif language == "9":
             choose()
-        if lang == prefix:
+        lang = LANGUAGES[prefix].title()
+        if langu == prefix:
             input(f"Your language is already set to {lang}.\n")
         else:
             data['language'] = prefix
@@ -257,6 +256,37 @@ def settings():
                 input(f"Successfully changed language amount to {langs}.\n")
             choose()
     elif type2 == "4":
+        clear()
+        ctypes.windll.kernel32.SetConsoleTitleW('Fuck-It-Up Translator | Allow Seed Input')
+        yn = input(f"Do you want to be able to set a seed every translation? (Y/N)\n").upper()
+        if yn == "Y":
+            setseed = True
+            with open('settings.json') as f:
+                data = json.load(f)
+            oldseed = data['seedinput']
+            if oldseed == setseed:
+                input("You already have seed input turned on.\n")
+                choose()
+            data['seedinput'] = True
+            rewrite = open("settings.json", "w")
+            json.dump(data, rewrite)
+            rewrite.close()
+            input(f"Successfully turned seed input on.\n")
+        elif yn == "N":
+            setseed = False
+            with open('settings.json') as f:
+                data = json.load(f)
+            oldseed = data['seedinput']
+            if oldseed == setseed:
+                input("You already have seed input turned off.\n")
+                choose()
+            data['seedinput'] = False
+            rewrite = open("settings.json", "w")
+            json.dump(data, rewrite)
+            rewrite.close()
+            input(f"Successfully turned seed input off.\n")
+        choose()
+    elif type2 == "5":
         ctypes.windll.kernel32.SetConsoleTitleW('Fuck-It-Up Translator | Show Similarity')
         clear()
         yn = input(f"Do you want to show similarity? (Y/N)\n").upper()
@@ -287,22 +317,24 @@ def settings():
             rewrite.close()
             input(f"Successfully turned similarity off.\n")
         choose()
-    elif type2 == "5":
+    elif type2 == "6":
         ctypes.windll.kernel32.SetConsoleTitleW('Fuck-It-Up Translator | View Settings')
         clear()
         input(f"(1) Language Prefix: {getlang()}\n"
               f"(2) Language: {getlangword()}\n"
               f"(3) Delay: {getdelay()}\n"
               f"(4) Language amount: {getlangs()}\n"
-              f"(5) Similarity: {'ON' if getsimilarity() else 'OFF'}\n")
+              f"(5) Seed input: {'ON' if getseedinput() else 'OFF'}\n"
+              f"(6) Similarity: {'ON' if getsimilarity() else 'OFF'}\n")
         choose()
-    elif type2 == "6":
+    elif type2 == "7":
         ctypes.windll.kernel32.SetConsoleTitleW('Fuck-It-Up Translator | Settings Help')
         clear()
         input("(1) Language - Output language\n"
               "(2) Delay - Delay between translations\n"
               "(3) Language amount - The amount of languages to translate to. Limited to 50.\n"
-              "(4) Similarity - Compares the starting phrase with the output phrase in percentage.\n")
+              "(4) Seed - Allows you to always generate the same languages.\n"
+              "(5) Similarity - Compares the starting phrase with the output phrase in percentage.\n")
         choose()
     else:
         choose()
