@@ -103,7 +103,7 @@ def translatefromfile():
         except:
             input("You are ratelimited! Wait a while or use a VPN/proxy.")
             choose()
-        print(f"{LANGUAGES[language].title()}: {word2.text}")
+        print(f"{LANGUAGES[language].title()}: {word2.text}\n\n")
         word = word2.text
         sleep(getdelay())
     try:
