@@ -7,6 +7,7 @@ import os
 import pyperclip
 import ctypes
 from fuzzywuzzy import fuzz
+import hashlib
 translator = Translator(raise_exception=True)
 clear = lambda: os.system('cls')
 languages = ["af", "sq", "am", "en", "ar", "hy", "az", "my", "eu", "be", "bn", "bs", "bg", "ceb", "cs", "ny", "zh-CN",
@@ -81,10 +82,13 @@ def translatefromfile():
     langs = []
     clear()
     if getseedinput():
-        seed = int(input("Seed (digits only): "))
+        seed = input("Seed: ").encode(encoding='utf-8')
+        if not str(seed).isnumeric():
+            hashed = hashlib.md5(seed).hexdigest()
+            seed = int(''.join([n for n in hashed if n.isdigit()]))
         random.seed(seed)
     num = getlangs()
-    word = open("text.txt", "r").read()
+    word = open("text.txt", "r", encoding="utf-8").read()
     if word == "":
         choose()
     startlang = LANGUAGES[translator.detect(word).lang].title()
@@ -124,7 +128,10 @@ def translate():
     clear()
     num = getlangs()
     if getseedinput():
-        seed = int(input("Seed (digits only): "))
+        seed = input("Seed: ").encode(encoding='utf-8')
+        if not str(seed).isnumeric():
+            hashed = hashlib.md5(seed).hexdigest()
+            seed = int(''.join([n for n in hashed if n.isdigit()]))
         random.seed(seed)
     word = input("Phrase: ")
     if word == "":
