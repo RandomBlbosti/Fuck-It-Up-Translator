@@ -10,3 +10,7 @@ If you have a suggestions, send me a discord message (RandomB#6160) or make an i
 3. Change settings within the program itself
 (changeable settings include: export language, toggleable seed input, similarity toggle, setting delay between translations, amount of languages to translate to)
 4. Help (explains what every settings item does)
+
+# Problems
+1. Help! I get: AttributeError: 'NoneType' object has no attribute 'group'
+Solution: Run "pip install googletrans==4.0.0-rc1" in whatever terminal you use.
