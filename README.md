@@ -13,4 +13,5 @@ If you have a suggestions, send me a discord message (RandomB#6160) or make an i
 
 # Problems
 1. Help! I get: AttributeError: 'NoneType' object has no attribute 'group'
+2. 
 Solution: Run "pip install googletrans==4.0.0-rc1" in whatever terminal you use.
