@@ -2,7 +2,7 @@
 A random program I made out of boredom. Translates a phrase to an amount of different languages, then back into your desired language.
 
 # Suggestions
-If you have a suggestions, send me a discord message (RandomB#6160) or make an issue!
+If you have a suggestion, send me a discord message (RandomB#6160) or make an issue!
 
 # Features
 1. Phrase Translate (translates a phrase you enter, doesn't work with new lines)
