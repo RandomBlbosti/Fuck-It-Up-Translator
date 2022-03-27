@@ -1,1 +1,1 @@
-{"language": "cs", "languageword": "Czech", "delay": 5, "languages": 2, "seedinput": true, "similarity": true}
+{"language": "detect", "languageWord": "Auto-Detect", "exportLanguageCode": "input", "exportLanguageWord": "Use-Input", "delay": 2, "languages": 20, "seedInput": true, "similarity": true}
