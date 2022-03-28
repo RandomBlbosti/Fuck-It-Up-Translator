@@ -133,7 +133,10 @@ def translatefromfile():
         choose()
     for i in langs:
         laststring += LANGUAGES[i].title() + " -> "
-    print(f"\n\n\n\n\n{startlang} -> {laststring}{getlangword()}")
+    if getexportlang() == "input":
+        print(f"\n\n\n\n\n{startlang} -> {laststring}{startlang}")
+    else:
+        print(f"\n\n\n\n\n{startlang} -> {laststring}{getexportlangword()}")
     pyperclip.copy(finalword.text)
     if getsimilarity():
         input(f"Original: {startword}\n\n\nTranslated: {finalword.text}\n\n\nSimilarity: {fuzz.ratio(startword, finalword.text)}%\n")
